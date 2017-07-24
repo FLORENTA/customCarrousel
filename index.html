@@ -7,6 +7,7 @@
 				margin: 0;
 				padding: 0;
 				max-width: 100vw;
+				min-height: 200vh;
 				font-family: "arial", sans-serif;
 			}
 			
@@ -49,7 +50,7 @@
 				z-index: 2;
 			}
 			
-			#carrousel .image-to-choose{
+			#carrousel .bullet-point{
 				height: 2.5vh;
 				width: 2.5vh;
 				border-radius: 2.5vh;
@@ -59,31 +60,66 @@
 			
 			#carrousel p{
 				position: absolute;
+				left: -40%;
 				bottom : 5vh;
 				width: 40%;
 				background: rgba(255,255,255,.7);
 				height: 100px;
 				display: flex;
-				color: #555;
+				color: #333;
 				align-items: center;
 				text-indent: 10px;
 				font-size: 2em;
+				transition: left 800ms;
+			}
+			
+			form{
+				position: absolute;
+				top: 2.5vh;
+				margin: 0;
+				height: 30px;
+				left: 20px;
 			}
 			
 		</style>
 	</head>
 <body>
+	<form>
+		<label for="frequency">Change the frequency between images (in milliseconds)</label>
+		<input type="number" id="frequency" min="1000" step="any" placeholder="5000"/>
+		<input type="submit" value="submit"/>
+	</form>
 	<div id="carrousel">
 		<ul>
-			<li style="background: url('http://wallpaper-gallery.net/images/image/image-13.jpg'); background-repeat: no-repeat; background-size: cover; background-position: center;">
-				<p>Beautiful elephant</p>
+			<li style="background: url('http://maxpixel.freegreatpicture.com/static/photo/640/Corporate-Break-Drink-Cup-Breakfast-Sunday-Food-18987.png'); background-repeat: no-repeat; background-size: cover; background-position: center;">
+				<p>	Whatever it takes for a croissant </p>
 			</li>
-			<li style="background: url('http://maxpixel.freegreatpicture.com/static/photo/1x/Smoothies-Fruits-Healthy-Fruit-Vitamins-Colorful-2253423.jpg'); background-repeat: no-repeat; background-size: cover; background-position: center;"></li>
-			<li style="background: url('https://s3-us-west-1.amazonaws.com/powr/defaults/image-slider1.jpg'); background-repeat: no-repeat; background-size: cover; background-position: center;"></li>
+			<li style="background: url('http://maxpixel.freegreatpicture.com/static/photo/1x/Smoothies-Fruits-Healthy-Fruit-Vitamins-Colorful-2253423.jpg'); background-repeat: no-repeat; background-size: cover; background-position: center;">
+				<p>	Perfect breakfast ! </p>
+			</li>
+			<li style="background: url('http://maxpixel.freegreatpicture.com/static/photo/1x/Food-Drink-Milkshake-Healthy-Beverage-Strawberry-1021027.jpg'); background-repeat: no-repeat; background-size: cover; background-position: center;">
+				<p>	Strawberry milkshake </p>
+			</li>
+			<li style="background: url('http://maxpixel.freegreatpicture.com/static/photo/640/Tea-Macro-Teabags-Drink-Kitchen-Black-Background-1132529.png'); background-repeat: no-repeat; background-size: cover; background-position: center;">
+				<p>	Tea bags </p>
+			</li>
+			<li style="background: url('http://maxpixel.freegreatpicture.com/static/photo/1x/Cup-Hot-Drink-Drink-Teacup-Tee-Tea-Time-Tea-Bags-1740871.jpg'); background-repeat: no-repeat; background-size: cover; background-position: center;">
+				<p>	Cup of tea </p>
+			</li>
+			<li style="background: url('http://maxpixel.freegreatpicture.com/static/photo/640/Grapefruit-Fruits-Fresh-Refreshment-Lemon-863072.jpg'); background-repeat: no-repeat; background-size: cover; background-position: center;">
+				<p>	Colorful pieces of fruit </p>
+			</li>
+			<li style="background: url('http://maxpixel.freegreatpicture.com/static/photo/640/Pasta-Beverage-Brown-Noodle-Food-1303003.jpg'); background-repeat: no-repeat; background-size: cover; background-position: center;">
+				<p>	Pasta </p>
+			</li>
 		</ul>
 	</div>
 </body>	
 <script type="text/javascript">
+
+	/* FA, 24/07/2017 */
+	
+	/* If improvements, please let me know */
 	
 	(function(){
 		var i = 0;
@@ -92,39 +128,48 @@
 		var c = liElts.length; 
 		var choices = [];
 		var timeout;
+		var time = 4000;
 		
-		/* container of bullet points */	
+		/* Container of bullet points */	
+		
 		var choicesElt = document.createElement("div");
 		choicesElt.setAttribute("id", "choices");
 		choicesElt.style.width = (10/3) * c + "%";
-		choicesElt.style.left = 50 - (10/3) * c * .5 + "vw";
+		choicesElt.style.left = 50 - (10/3) * c * .5 + "%";
 		
-		/* Append the container of bullet point to the carrousel with a size adjusted to the nb of images */
+		/* Append the container of bullet points to the carrousel with a size depending on the nb of images */
+		
 		carrouselElt.appendChild(choicesElt);
 		
 		/* For all images different from i, we set opacity back to 0 */
+		
 		function switchImages(){
 			for(var j = 0; j < c; ++j){
 				if(i != j){
 					liElts[j].style.opacity = "0";
+					liElts[j].querySelector("p").style.left = "-40%";
+					liElts[j].querySelector("p").style.transition = "0ms";
 					choices[j].style.background = "#fff";
 				}
 			}
 			liElts[i].style.opacity = "1";
+			liElts[i].querySelector("p").style.left = "0";
+			liElts[i].querySelector("p").style.transition = "800ms";
 			choices[i].style.background = "black";
 		}
 		
 		/* Creation of the bullet points */
+		
 		for(var k = 0; k < c; ++k){
 			var divElt = document.createElement("div");
-			divElt.setAttribute("class", "image-to-choose");
+			divElt.setAttribute("class", "bullet-point");
 			divElt.setAttribute("data-img", k);
 			
 			divElt.addEventListener("click", function(){
 				window.clearTimeout(timeout);
 				i = this.getAttribute("data-img");
 				switchImages();
-				timeout =  setTimeout(changeBackground, 5000);
+				timeout =  setTimeout(changeBackground, time);
 			});
 			
 			choices.push(divElt);
@@ -132,6 +177,7 @@
 		}
 	
 		liElts[0].style.opacity = "1";
+		liElts[0].querySelector("p").style.left = "0";
 		choices[0].style.background = "black";
 		
 		function changeBackground(){		
@@ -145,14 +191,23 @@
 				liElts[c - 1].style.opacity = "0";	
 				choices[c - 1].style.background = "#fff";
 				liElts[i].style.opacity = "1";
+				liElts[i].querySelector("p").style.left = "0";
+				liElts[i].querySelector("p").style.transition = "800ms";
 				choices[i].style.background = "black";
 			}				
 			
-			timeout =  setTimeout(changeBackground, 5000);
+			timeout =  setTimeout(changeBackground, time);
 				
 		}
 		
-		timeout = setTimeout(changeBackground, 5000);
+		timeout = setTimeout(changeBackground, time);
+		
+		document.querySelector("form").addEventListener("submit", function(e){
+			e.preventDefault();
+			window.clearTimeout(timeout);
+			time = this.elements.frequency.value;
+			timeout = setTimeout(changeBackground, time)
+		});
 		
 	})();
 	
