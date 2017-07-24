@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<style type="text/css">
+			body{
+				overflow-y: scroll;
+				margin: 0;
+				padding: 0;
+				max-width: 100vw;
+				font-family: "arial", sans-serif;
+			}
+			
+			#carrousel{
+				box-sizing : border-box;
+				height: 90vh;
+				overflow: hidden;
+				margin: 10vh 0 0 0;
+				position: relative;
+			}
+			
+			#carrousel ul {
+				width: 100%;
+				height: 100%;
+				position: relative;
+				list-style: none;
+				padding: 0;
+				margin: 0;
+			}
+			
+			#carrousel ul li{
+				width: 100%;
+				height: 100%;
+				margin: 0;
+				transition: opacity 1000ms;
+				opacity: 0;
+				z-index: 0;
+				position: absolute;
+				top: 0;
+				left: 0;
+			}
+			
+			#carrousel #choices{
+				display: flex;
+				justify-content: space-around;
+				align-items: center;
+				height: 50px;
+				position: absolute;
+				bottom: 2.5vh;
+				z-index: 2;
+			}
+			
+			#carrousel .image-to-choose{
+				height: 2.5vh;
+				width: 2.5vh;
+				border-radius: 2.5vh;
+				background: #fff;
+				cursor: pointer;
+			}
+			
+			#carrousel p{
+				position: absolute;
+				bottom : 5vh;
+				width: 40%;
+				background: rgba(255,255,255,.7);
+				height: 100px;
+				display: flex;
+				color: #555;
+				align-items: center;
+				text-indent: 10px;
+				font-size: 2em;
+			}
+			
+		</style>
+	</head>
+<body>
+	<div id="carrousel">
+		<ul>
+			<li style="background: url('http://wallpaper-gallery.net/images/image/image-13.jpg'); background-repeat: no-repeat; background-size: cover; background-position: center;">
+				<p>Beautiful elephant</p>
+			</li>
+			<li style="background: url('http://maxpixel.freegreatpicture.com/static/photo/1x/Smoothies-Fruits-Healthy-Fruit-Vitamins-Colorful-2253423.jpg'); background-repeat: no-repeat; background-size: cover; background-position: center;"></li>
+			<li style="background: url('https://s3-us-west-1.amazonaws.com/powr/defaults/image-slider1.jpg'); background-repeat: no-repeat; background-size: cover; background-position: center;"></li>
+		</ul>
+	</div>
+</body>	
+<script type="text/javascript">
+	
+	(function(){
+		var i = 0;
+		var carrouselElt = document.getElementById("carrousel");
+		var liElts = document.querySelectorAll("#carrousel ul li");
+		var c = liElts.length; 
+		var choices = [];
+		var timeout;
+		
+		/* container of bullet points */	
+		var choicesElt = document.createElement("div");
+		choicesElt.setAttribute("id", "choices");
+		choicesElt.style.width = (10/3) * c + "%";
+		choicesElt.style.left = 50 - (10/3) * c * .5 + "vw";
+		
+		/* Append the container of bullet point to the carrousel with a size adjusted to the nb of images */
+		carrouselElt.appendChild(choicesElt);
+		
+		/* For all images different from i, we set opacity back to 0 */
+		function switchImages(){
+			for(var j = 0; j < c; ++j){
+				if(i != j){
+					liElts[j].style.opacity = "0";
+					choices[j].style.background = "#fff";
+				}
+			}
+			liElts[i].style.opacity = "1";
+			choices[i].style.background = "black";
+		}
+		
+		/* Creation of the bullet points */
+		for(var k = 0; k < c; ++k){
+			var divElt = document.createElement("div");
+			divElt.setAttribute("class", "image-to-choose");
+			divElt.setAttribute("data-img", k);
+			
+			divElt.addEventListener("click", function(){
+				window.clearTimeout(timeout);
+				i = this.getAttribute("data-img");
+				switchImages();
+				timeout =  setTimeout(changeBackground, 5000);
+			});
+			
+			choices.push(divElt);
+			choicesElt.appendChild(divElt);
+		}
+	
+		liElts[0].style.opacity = "1";
+		choices[0].style.background = "black";
+		
+		function changeBackground(){		
+			
+			i++;
+			if(i < c ) {
+				switchImages();
+			}	
+			else{
+				i = 0;
+				liElts[c - 1].style.opacity = "0";	
+				choices[c - 1].style.background = "#fff";
+				liElts[i].style.opacity = "1";
+				choices[i].style.background = "black";
+			}				
+			
+			timeout =  setTimeout(changeBackground, 5000);
+				
+		}
+		
+		timeout = setTimeout(changeBackground, 5000);
+		
+	})();
+	
+</script>
+</html>
